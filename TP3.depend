@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1728681776 source:c:\kristi_utc\gi05\nf16\tp\tp3\tp3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"tp3.h"
+
+1728677895 c:\kristi_utc\gi05\nf16\tp\tp3\tp3\tp3.h
+
+1728681869 source:c:\kristi_utc\gi05\nf16\tp\tp3\tp3\tp3.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"tp3.h"
+
