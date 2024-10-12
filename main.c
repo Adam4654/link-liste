@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tp3.h"
+#define MAX_MEMORY 5
 
 int main() {
     //========Initialisation=========//
+    //matrice_creuse *memory_matrice = (matrice_creuse *)malloc(MAX_MEMORY*sizeof(matrice_creuse));
+    //for(int i=0; i<MAX_MEMORY; i++) memory_matrice[i] = NULL;
+
     matrice_creuse *matrice1;
     matrice_creuse matrice2;
     // ============= MENU UTILISATEUR ============= */
@@ -26,12 +30,14 @@ int main() {
         switch (choix) {
             case '1' :
                 matrice1 = cree_matrice();
-                remplirMatrice(&matrice2, 4, 2);
+                remplirMatrice(&matrice2, 4, 3);
                 // Ecrire ici le code pour ce choix utlisateur
                 break;
 
             case '2' :
+                printf("\nAffichange de matrice %p: ", matrice1);
                 afficherMatrice(*matrice1);
+                printf("\nAffichange de matrice %p: ", &matrice2);
                 afficherMatrice(matrice2);
                 // Ecrire ici le code pour ce choix utlisateur
                 break;
@@ -54,7 +60,7 @@ int main() {
                 break;
 
             case '6' :
-                // Ecrire ici le code pour ce choix utlisateur
+                additionerMatrices(*matrice1, matrice2);
                 break;
 
             case '7' :
@@ -74,6 +80,6 @@ int main() {
         printf("\n\n\n");
         viderBuffer();
     }
-
+//    free(memory_matrice);
     return 0;
 }

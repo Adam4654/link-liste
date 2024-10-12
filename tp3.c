@@ -65,7 +65,7 @@ void remplirMatrice(matrice_creuse *matrice, int N, int M) {
 // 2.	Ecrire une fonction qui permet d’afficher une matrice creuse sous forme de tableau
 void afficherMatrice(matrice_creuse m){
     element* selected_element=NULL;
-    printf("\nAffichange de matrice %p: ", m.tab_lignes);
+    //printf("\nAffichange de matrice %p: ", m.tab_lignes);
     for(int i=0; i<m.Nlignes; i++){
         printf("\n");
         selected_element = m.tab_lignes[i];
@@ -111,6 +111,8 @@ int rechercherValeur(matrice_creuse m, int i, int j) {
             selected_element = selected_element->suivant;
         }
         if(selected_element != NULL && selected_element->col == j) result = selected_element->val;
+    }else{
+        printf("Fatal error max [%d][%d]", m.Nlignes, m.Ncolonnes);
     }
     return result;
 }
@@ -128,9 +130,62 @@ void affecterValeur(matrice_creuse m, int i, int j, int val) {
 
 // 6.	Ecrire une fonction qui réalise la somme de deux matrices
 void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
-    /*
-    * TO DO : Ecrire ici votre code
-    */
+    if(m1.Ncolonnes == m2.Ncolonnes && m1.Nlignes == m2.Nlignes){
+        afficherMatrice(m1);
+        for(int i=0; i<m1.Nlignes; i++){
+            element* ligne1 = (m1.tab_lignes)[i];
+            element* ligne2 = (m2.tab_lignes)[i];
+            element* old1 = ligne1;
+            if(ligne1 == NULL && ligne2==NULL) continue;
+            while( (ligne1 != NULL) && (ligne2 != NULL)){
+                if(ligne1->col == ligne2->col){
+                    ligne1->val += ligne2->val;
+                    old1 = ligne1;
+                    ligne1 = ligne1->suivant;
+                    ligne2 = ligne2->suivant;
+                }else if(ligne2->col < ligne1->col){
+                    //colone de 2 viens avant colonne de 1
+                    element* ajout_element = creerElement(ligne2->col, ligne2->val);
+                    ajout_element->suivant = ligne1;
+                    if(old1 != ligne1){
+                            //if(old1 != (m1.tab_lignes)[i]){
+                        old1->suivant = ajout_element;
+                    }else{
+                        //le tout premiere element dois etre obtenu par ligne2
+                        m1.tab_lignes[i] = ajout_element;
+                    }
+                    old1 = ajout_element;
+                    ligne2 = ligne2->suivant;
+                }else{
+                    //Si colonne de ligne1 avant colonne de ligne 2
+                    old1 = ligne1;
+                    ligne1 = ligne1->suivant;
+                }
+
+            }
+            if(ligne1 == NULL){
+                if(old1 == (m1.tab_lignes)[i]){ //toute ligne 1 est vide faut ajouter le premiere element
+                    element * ajout_element = creerElement(ligne2->col, ligne2->val);
+                    (m1.tab_lignes)[i] = ajout_element;
+                    old1 = ajout_element;
+                    ligne2 = ligne2->suivant;
+                }
+                while(ligne2 != NULL){
+                    element * ajout_element = creerElement(ligne2->col, ligne2->val);
+                    old1->suivant = ajout_element;
+                    old1 = ajout_element;
+                    ligne2 = ligne2->suivant;
+                }
+            }
+        }
+        printf("\n+\n");
+        afficherMatrice(m2);
+        printf("\n=\n");
+        afficherMatrice(m1);
+    }else{
+        printf("Erreur Fatal. Les matrice ne sont pas de meme taille. Aucune operation affectuee");
+    }
+
 }
 
 
