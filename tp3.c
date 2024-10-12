@@ -222,7 +222,12 @@ void viderBuffer (){
 }
 
 /*========== Fonction Cree par nous ================*/
-void free_matrice(matrice_creuse m){
+void free_matrice(matrice_creuse* m){
+    free_contenuMatrice(*m);
+    free(m);
+}
+
+void free_contenuMatrice(matrice_creuse m){
     for(int i=0; i<m.Nlignes; i++){
         if( (m.tab_lignes)[i] == NULL) continue;
         while(((m.tab_lignes)[i])->suivant != NULL){
