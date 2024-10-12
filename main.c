@@ -41,7 +41,12 @@ int main() {
                 break;
 
             case '4' :
-                // Ecrire ici le code pour ce choix utlisateur
+                int ligne, colone;
+                printf("Ligne: ");
+                scanf(" %d", &ligne);
+                printf("Colonne: ");
+                scanf(" %d", &colone);
+                printf(" [%d][%d] -> %d", ligne, colone, rechercherValeur(*matrice1, ligne, colone));
                 break;
 
             case '5' :
