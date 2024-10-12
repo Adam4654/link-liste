@@ -7,6 +7,7 @@ struct Element {
     int val;
     struct Element *suivant;
 } ;
+
 typedef struct Element element;
 
 
@@ -37,4 +38,7 @@ int nombreOctetsGagnes(matrice_creuse m);
 element *creerElement(int colonne, int valeur);
 void viderBuffer ();
 
+//Notre Fonctions
+matrice_creuse *cree_matrice();
+void free_matrice(matrice_creuse);
 #endif // TP3_H_INCLUDED
