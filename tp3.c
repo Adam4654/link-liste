@@ -132,6 +132,8 @@ void affecterValeur(matrice_creuse m, int i, int j, int val) {
 void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
     if(m1.Ncolonnes == m2.Ncolonnes && m1.Nlignes == m2.Nlignes){
         afficherMatrice(m1);
+        printf("\n+\n");
+        afficherMatrice(m2);
         for(int i=0; i<m1.Nlignes; i++){
             element* ligne1 = (m1.tab_lignes)[i];
             element* ligne2 = (m2.tab_lignes)[i];
@@ -163,7 +165,7 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
                 }
 
             }
-            if(ligne1 == NULL){
+            if(ligne1 == NULL && ligne2!=NULL){
                 if(old1 == (m1.tab_lignes)[i]){ //toute ligne 1 est vide faut ajouter le premiere element
                     element * ajout_element = creerElement(ligne2->col, ligne2->val);
                     (m1.tab_lignes)[i] = ajout_element;
@@ -178,8 +180,6 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
                 }
             }
         }
-        printf("\n+\n");
-        afficherMatrice(m2);
         printf("\n=\n");
         afficherMatrice(m1);
     }else{
