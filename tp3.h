@@ -41,4 +41,5 @@ void viderBuffer ();
 //Notre Fonctions
 matrice_creuse *cree_matrice();
 void free_matrice(matrice_creuse *);
+void free_contenuMatrice(matrice_creuse);
 #endif // TP3_H_INCLUDED
