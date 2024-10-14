@@ -26,7 +26,7 @@ int main() {
         printf("\n2. Afficher une matrice creuse sous forme de tableau");
         printf("\n3. Afficher une matrice creuse sous forme de listes");
         printf("\n4. Donner la valeur d'un element d'une matrice creuse");
-        printf("\n5. Affecter une valeur à un élément d’une matrice creuse");
+        printf("\n5. Affecter une valeur Ã  un Ã©lÃ©ment dâ€™une matrice creuse");
         printf("\n6. Additionner deux matrices creuses");
         printf("\n7. Calculer le gain");
         printf("\n8. Quitter");
@@ -105,6 +105,12 @@ int main() {
                 break;
 
             case '3' :
+                printf("\nAffichange de matrice sous la forme de liste: %d. %p: ", iMatrice_active+1, memory_matrice[iMatrice_active]);
+                if(memory_matrice[iMatrice_active] != NULL){
+                    afficherMatriceListes(*memory_matrice[iMatrice_active]);
+                }else{
+                    printf("\nMatrice vide!");
+                }
                 // Ecrire ici le code pour ce choix utlisateur
                 break;
 
