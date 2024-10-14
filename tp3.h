@@ -1,7 +1,11 @@
-#ifndef TP3_H_INCLUDED
-#define TP3_H_INCLUDED
+//
+// Created by xiangyang on 2024/10/12.
+//
 
-// STRUCTURE ELEMENT
+#ifndef LINK_LIST_TP3_H
+#define LINK_LIST_TP3_H
+
+
 struct Element {
     int col;
     int val;
@@ -42,4 +46,8 @@ void viderBuffer ();
 matrice_creuse *cree_matrice();
 void free_matrice(matrice_creuse *);
 void free_contenuMatrice(matrice_creuse);
-#endif // TP3_H_INCLUDED
+
+#endif //LINK_LIST_TP3_H
+
+
+

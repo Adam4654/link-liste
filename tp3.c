@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,7 +63,7 @@ void remplirMatrice(matrice_creuse *matrice, int N, int M) {
     return new_element;
 }*/
 
-// 2.	Ecrire une fonction qui permet d’afficher une matrice creuse sous forme de tableau
+// 2.	Ecrire une fonction qui permet dâ€™afficher une matrice creuse sous forme de tableau
 void afficherMatrice(matrice_creuse m){
     element* selected_element=NULL;
     //printf("\nAffichange de matrice %p: ", m.tab_lignes);
@@ -93,16 +94,31 @@ void afficherMatrice(matrice_creuse m){
 
 
 
-// 3.	Ecrire une fonction qui permet d’afficher toutes les listes chaînées
+// 3.	Ecrire une fonction qui permet dâ€™afficher toutes les listes chaÃ®nÃ©es
 void afficherMatriceListes(matrice_creuse m) {
-    /*
-    * TO DO : Ecrire ici votre code
-    */
+    element* selected_element=NULL;
+    //printf("\nAffichange de matrice %p: ", m.tab_lignes);
+    for(int i=0; i<m.Nlignes; i++){
+        printf("\nligne %d ->",i+1);
+        selected_element = m.tab_lignes[i];
+        //Si tout la ligne est vide:
+        if(selected_element == NULL){
+            continue;
+        }
+        while(selected_element != NULL){
+            printf("[%d , %d]--%d",i,selected_element->col,selected_element->val);
+            selected_element = selected_element->suivant;
+            if (selected_element)
+                printf("->");
+        }
+        if (i>0 && i<m.Nlignes-1)
+            printf("\n|\nv\n");
+    }
 }
 
 
 
-//  4.	Ecrire une fonction qui renvoie la valeur de l'élément de la ligne i et la colonne j
+//  4.	Ecrire une fonction qui renvoie la valeur de l'Ã©lÃ©ment de la ligne i et la colonne j
 int rechercherValeur(matrice_creuse m, int i, int j) {
     int result = 0;
     if(i<m.Nlignes && j<m.Ncolonnes){
@@ -119,16 +135,47 @@ int rechercherValeur(matrice_creuse m, int i, int j) {
 
 
 
-// 5.	Ecrire une fonction qui affecte une valeur donnée à l'élément de la ligne i et la colonne j
+// 5.	Ecrire une fonction qui affecte une valeur donnÃ©e Ã  l'Ã©lÃ©ment de la ligne i et la colonne j
 void affecterValeur(matrice_creuse m, int i, int j, int val) {
-    /*
-    * TO DO : Ecrire ici votre code
-    */
+    element* selected_element=m.tab_lignes[i-1];
+    if(selected_element==NULL) {            //cas ligne est vide
+        m.tab_lignes[i - 1] = (element *) malloc(sizeof(element));
+        selected_element = m.tab_lignes[i - 1];
+        selected_element->suivant = NULL;
+        selected_element->col = j;
+        selected_element->val = val;
+    } else{                                 //cas ligne pas vide
+        while(selected_element->col != j){
+            selected_element=selected_element->suivant;
+        }                                   // essayer Ã  trouver cet element
+        if(selected_element->col == j)      //colone est dans la list
+            selected_element->val=val;
+        else{                               //colone n'exist pas
+            selected_element=m.tab_lignes[i-1];
+            while(selected_element->suivant!=NULL && selected_element->suivant->col<j)
+                selected_element=selected_element->suivant;
+            if(selected_element!=NULL){     //ce n'est pas la plus grand colone
+                element  *temp=(element*)malloc(sizeof(element));
+                temp->suivant=selected_element->suivant;
+                selected_element->suivant=temp;
+                temp = m.tab_lignes[i - 1];
+                temp->col = j;
+                temp->val = val;
+            }else{                              // la plus grand element.
+                element  *temp=(element*)malloc(sizeof(element));
+                temp->suivant=NULL;
+                selected_element->suivant=temp;
+                temp = m.tab_lignes[i - 1];
+                temp->col = j;
+                temp->val = val;
+            }
+        }
+    }
 }
 
 
 
-// 6.	Ecrire une fonction qui réalise la somme de deux matrices
+// 6.	Ecrire une fonction qui rÃ©alise la somme de deux matrices
 void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
     if(m1.Ncolonnes == m2.Ncolonnes && m1.Nlignes == m2.Nlignes){
         afficherMatrice(m1);
@@ -150,7 +197,7 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
                     element* ajout_element = creerElement(ligne2->col, ligne2->val);
                     ajout_element->suivant = ligne1;
                     if(old1 != ligne1){
-                            //if(old1 != (m1.tab_lignes)[i]){
+                        //if(old1 != (m1.tab_lignes)[i]){
                         old1->suivant = ajout_element;
                     }else{
                         //le tout premiere element dois etre obtenu par ligne2
@@ -190,12 +237,21 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
 
 
 
-// 7.	Ecrire une fonction qui retourne le nombre d’octets gagnés
+// 7.	Ecrire une fonction qui retourne le nombre dâ€™octets gagnÃ©s
 int nombreOctetsGagnes(matrice_creuse m) {
     int result = 0;
-    /*
-    * TO DO : Ecrire ici votre code
-    */
+    int counter=0;
+    int ligne = m.Nlignes;
+    int colone = m.Ncolonnes;
+    element* selected_element = NULL;
+    for(int i=0; i<ligne;i++){
+        selected_element=m.tab_lignes[i];
+        while(selected_element) {
+            selected_element = selected_element->suivant;
+            counter++;
+        }
+    }
+    result=ligne*colone-counter*sizeof(element);
     return result;
 }
 
@@ -203,7 +259,7 @@ int nombreOctetsGagnes(matrice_creuse m) {
 
 /*==============  FONCTIONS SUPPLEMENTAIRES ===============*/
 
-// fonction qui renvoie un nouvel élément de liste
+// fonction qui renvoie un nouvel Ã©lÃ©ment de liste
 element *creerElement(int colonne, int valeur) {
     element *nouvelElement = malloc(sizeof(element));
     nouvelElement->col = colonne;
@@ -213,7 +269,7 @@ element *creerElement(int colonne, int valeur) {
 }
 
 
-// fonction qui permet de vider le buffer d'entrée clavier
+// fonction qui permet de vider le buffer d'entrÃ©e clavier
 void viderBuffer (){
     char c;
     do {
