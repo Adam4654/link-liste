@@ -135,7 +135,21 @@ int main() {
                 break;
 
             case '5' :
-                // Ecrire ici le code pour ce choix utlisateur
+                printf("\nMatrice selectionner: %d. %p", iMatrice_active+1, memory_matrice[iMatrice_active]);
+                int i, j, val;
+                i = j = val = -1;
+                do{ printf("Quel ligne: 'n");
+                    scanf(" %d", &i);
+                }while(i<0 || i>memory_matrice[iMatrice_active]->Nlignes-1);
+
+                do{ printf("Quel colonne: 'n");
+                    scanf(" %d", &j);
+                }while(j<0 || j>memory_matrice[iMatrice_active]->Ncolonnes-1);
+
+                printf("Quel Valeur: 'n");
+                scanf(" %d", &val);
+
+                affecterValeur(*memory_matrice[iMatrice_active], i, j, val);
                 break;
 
             case '6' :
@@ -162,8 +176,14 @@ int main() {
                 break;
 
             case '7' :
-                // Ecrire ici le code pour ce choix utlisateur
-               break;
+                printf("\nMatrice calculer Octet Gagne: %d. %p",  iMatrice_active+1, memory_matrice[iMatrice_active]);
+                int gagne = nombreOctetsGagnes(*memory_matrice[iMatrice_active]);
+                if(gagne >= 0){
+                    printf("\nVous avez gagne %d octet", gagne);
+                }else{
+                    printf("\nVous avez perdu %d octet", -gagne);
+                }
+                break;
 
             case '8' :
                 for(int i=0; i<MAX_MEMORY; i++){

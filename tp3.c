@@ -251,7 +251,7 @@ int nombreOctetsGagnes(matrice_creuse m) {
             counter++;
         }
     }
-    result=ligne*colone-counter*sizeof(element);
+    result=ligne*colone*sizeof(int)-(counter*sizeof(element)+ ligne*sizeof(element*)+sizeof(matrice_creuse));
     return result;
 }
 
