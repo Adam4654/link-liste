@@ -99,19 +99,20 @@ void afficherMatriceListes(matrice_creuse m) {
     element* selected_element=NULL;
     //printf("\nAffichange de matrice %p: ", m.tab_lignes);
     for(int i=0; i<m.Nlignes; i++){
-        printf("\nligne %d ->",i+1);
+        printf("\nligne %d -> ",i);
         selected_element = m.tab_lignes[i];
         //Si tout la ligne est vide:
         if(selected_element == NULL){
             continue;
         }
         while(selected_element != NULL){
-            printf("[%d , %d]--%d",i,selected_element->col,selected_element->val);
+            printf("[%d] : %d",selected_element->col,selected_element->val);
             selected_element = selected_element->suivant;
             if (selected_element)
-                printf("->");
+                //print(SPACING);
+                printf("  ----->  ");
         }
-        if (i>0 && i<m.Nlignes-1)
+        if (i>=0 && i<m.Nlignes-1)
             printf("\n|\nv\n");
     }
 }
@@ -137,39 +138,68 @@ int rechercherValeur(matrice_creuse m, int i, int j) {
 
 // 5.	Ecrire une fonction qui affecte une valeur donnée à l'élément de la ligne i et la colonne j
 void affecterValeur(matrice_creuse m, int i, int j, int val) {
-    element* selected_element=m.tab_lignes[i-1];
+    element* selected_element=m.tab_lignes[i];
+    element* old_element = NULL;
     if(selected_element==NULL) {            //cas ligne est vide
-        m.tab_lignes[i - 1] = (element *) malloc(sizeof(element));
-        selected_element = m.tab_lignes[i - 1];
+        m.tab_lignes[i] = (element *) malloc(sizeof(element));
+        selected_element = m.tab_lignes[i];
         selected_element->suivant = NULL;
         selected_element->col = j;
         selected_element->val = val;
     } else{                                 //cas ligne pas vide
-        while(selected_element->col != j){
+        while(selected_element != NULL && selected_element->col < j){
+            old_element = selected_element;
             selected_element=selected_element->suivant;
         }                                   // essayer à trouver cet element
-        if(selected_element->col == j)      //colone est dans la list
+        if(selected_element != NULL && selected_element->col == j)      //colone est dans la list
             selected_element->val=val;
-        else{                               //colone n'exist pas
-            selected_element=m.tab_lignes[i-1];
-            while(selected_element->suivant!=NULL && selected_element->suivant->col<j)
+        else{
+            element  *temp=(element*)malloc(sizeof(element));
+            if(selected_element == NULL){
+                if(old_element == NULL)
+                    m.tab_lignes[i] = temp;
+                else{
+                    old_element->suivant = temp;
+                }
+                temp->suivant = NULL;
+            }else{
+                if(old_element == NULL)
+                    m.tab_lignes[i] = temp;
+                else
+                    old_element->suivant= temp;
+                temp->suivant = selected_element;
+            }
+            temp->val = val;
+            temp->col = j;
+        }/*
+
+            int first = 1;                                //colone n'exist pas
+            selected_element=m.tab_lignes[i];
+            while(selected_element->suivant!=NULL && ((selected_element->suivant)->col)<j){
                 selected_element=selected_element->suivant;
+                first = 0;
+            }
             if(selected_element!=NULL){     //ce n'est pas la plus grand colone
                 element  *temp=(element*)malloc(sizeof(element));
-                temp->suivant=selected_element->suivant;
-                selected_element->suivant=temp;
-                temp = m.tab_lignes[i - 1];
+                if(first){
+                    temp->suivant=selected_element;
+                    m.tab_lignes[i] = temp;
+                 }else{
+                    temp->suivant=selected_element->suivant;
+                }
                 temp->col = j;
                 temp->val = val;
             }else{                              // la plus grand element.
                 element  *temp=(element*)malloc(sizeof(element));
                 temp->suivant=NULL;
                 selected_element->suivant=temp;
-                temp = m.tab_lignes[i - 1];
+                //temp = m.tab_lignes[i - 1];
                 temp->col = j;
                 temp->val = val;
+
             }
-        }
+
+        }*/
     }
 }
 

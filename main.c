@@ -26,7 +26,7 @@ int main() {
         printf("\n2. Afficher une matrice creuse sous forme de tableau");
         printf("\n3. Afficher une matrice creuse sous forme de listes");
         printf("\n4. Donner la valeur d'un element d'une matrice creuse");
-        printf("\n5. Affecter une valeur à un élément d’une matrice creuse");
+        printf("\n5. Affecter une valeur a un element d'une matrice creuse");
         printf("\n6. Additionner deux matrices creuses");
         printf("\n7. Calculer le gain");
         printf("\n8. Quitter");
@@ -138,15 +138,15 @@ int main() {
                 printf("\nMatrice selectionner: %d. %p", iMatrice_active+1, memory_matrice[iMatrice_active]);
                 int i, j, val;
                 i = j = val = -1;
-                do{ printf("Quel ligne: 'n");
+                do{ printf("\nLigne (0 - %d): ", memory_matrice[iMatrice_active]->Nlignes-1);
                     scanf(" %d", &i);
                 }while(i<0 || i>memory_matrice[iMatrice_active]->Nlignes-1);
 
-                do{ printf("Quel colonne: 'n");
+                do{ printf("\nColonne (0 - %d): ", memory_matrice[iMatrice_active]->Ncolonnes-1);
                     scanf(" %d", &j);
                 }while(j<0 || j>memory_matrice[iMatrice_active]->Ncolonnes-1);
 
-                printf("Quel Valeur: 'n");
+                printf("Quel Valeur: ");
                 scanf(" %d", &val);
 
                 affecterValeur(*memory_matrice[iMatrice_active], i, j, val);
