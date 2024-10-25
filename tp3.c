@@ -140,7 +140,7 @@ int rechercherValeur(matrice_creuse m, int i, int j) {
 void affecterValeur(matrice_creuse m, int i, int j, int val) {
     element* selected_element=m.tab_lignes[i];
     element* old_element = NULL;
-    if(selected_element==NULL && val != 0) {  //CASE 1         //cas ligne est vide et on ajout element non nul
+    if(selected_element==NULL && val != 0) {  //CASE 1         //cas ligne est vide et on ajout element non nul si nul on fait riens
         //metre a jour la tete
         m.tab_lignes[i] = creerElement(j, val);
 
