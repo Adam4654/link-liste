@@ -6,16 +6,11 @@
 
 int main() {
     //========Initialisation=========//
+    //Creation d'un memoire (liste de matrices)
     int iMatrice_active = 0;
     matrice_creuse ** memory_matrice = (matrice_creuse **)malloc(MAX_MEMORY*sizeof(matrice_creuse*));
     for(int i=0; i<MAX_MEMORY; i++) memory_matrice[i] = NULL;
 
-    //matrice_creuse active_matrice = memory_matrice[0];
-
-
-
-    //matrice_creuse *matrice1;
-    //matrice_creuse matrice2;
     // ============= MENU UTILISATEUR ============= */
     char choix = ' ';
     char choix2 = '0';
@@ -39,6 +34,8 @@ int main() {
                 viderBuffer();
                 choix2 = '0';
                 while(choix2 != '3'){
+
+                    //Afficher le memoire:
                     for(int i=0; i<MAX_MEMORY; i++){
                         char selected;
                         selected = (i == iMatrice_active)? '>' : ' ';
@@ -56,6 +53,7 @@ int main() {
                     choix2 = getchar();
                     switch(choix2){
                         case '1':
+                            //Select le matrice active:
                             iMatrice_active = -1;
                             while(iMatrice_active<0 || iMatrice_active>MAX_MEMORY){
                                 printf("Selection[%d - %d]: ", 1, MAX_MEMORY);
@@ -64,6 +62,7 @@ int main() {
                             }
                             break;
                         case '2':
+                            //Vider le selection s'il n'est pas vide
                             if(memory_matrice[iMatrice_active]){
                                 free_matrice(memory_matrice[iMatrice_active]);
                                 memory_matrice[iMatrice_active] = NULL;
@@ -80,15 +79,13 @@ int main() {
                 }
                 break;
             case '1' :
+                //Creation et Remplisage de matrice
                 printf("\nMatrice active a rempli: %d. %p\n", iMatrice_active+1, memory_matrice[iMatrice_active]);
                 if(memory_matrice[iMatrice_active] != NULL){
                     printf("\nMatrice deja remplit");
                 }else{
                     memory_matrice[iMatrice_active] = cree_matrice();
                 }
-                //matrice1 = cree_matrice();
-                //remplirMatrice(&matrice2, 4, 3);
-                // Ecrire ici le code pour ce choix utlisateur
                 break;
 
             case '2' :

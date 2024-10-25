@@ -14,7 +14,9 @@ matrice_creuse *cree_matrice(){
         printf("Saisir NxM: ");
         scanf(" %d %d", &ligne, &col);
     }
+    //allocate l'espace memoire
     matrice_creuse *matrice = (matrice_creuse *)malloc(sizeof(matrice_creuse));
+    //Appele Remplire le matrice
     remplirMatrice(matrice, ligne, col);
     return matrice;
 }
@@ -33,40 +35,32 @@ void remplirMatrice(matrice_creuse *matrice, int N, int M) {
         element* old_element = NULL;
         printf("Ligne #%3d\n", i);
         for(int j=0; j<M; j++){
+                //Obtenir le valeur
             printf("Colone #%3d\t\t element [%d; %d]: ", j, i, j);
-
-            //scanf(" %d", valeur_element);
-            //pour etre plus vite on met just retour a la ligne au lie de 0
+                //pour etre plus vite on met just retour a la ligne au lie de 0
             scanf("%c");
             gets(input);
             if(input[0] == '\0' || input[0] == '0'){
                 continue;
             }
+                //converter le valeur en int
             valeur_element = (int*)atoi(input);
             element* elementJ = creerElement(j, valeur_element);
             if(old_element != NULL){
                 old_element->suivant = elementJ;
             }
             old_element = elementJ;
-            //Tester le premiere element pour defnire la tete de la ligne
+            //Tester le premiere element pour definire la tete de la ligne
             if(!has_element) (matrice->tab_lignes)[i] = old_element;
             has_element = 1;
         }
     }
 }
 
-/*element* cree_element(int col, int val){
-    element *new_element = (element*) malloc(sizeof(element));
-    new_element->col = col;
-    new_element->val = val;
-    new_element->suivant = NULL;
-    return new_element;
-}*/
 
 // 2.	Ecrire une fonction qui permet d’afficher une matrice creuse sous forme de tableau
 void afficherMatrice(matrice_creuse m){
     element* selected_element=NULL;
-    //printf("\nAffichange de matrice %p: ", m.tab_lignes);
     for(int i=0; i<m.Nlignes; i++){
         printf("\n");
         selected_element = m.tab_lignes[i];
@@ -77,15 +71,20 @@ void afficherMatrice(matrice_creuse m){
             }
             continue;
         }
+        //sinon
         int last_indice = 0;
         while(selected_element != NULL){
             for(int j=last_indice; j<selected_element->col; j++){
                 printf(SPACING, 0);
+                //imprimer des zeros avant l'element non nul
             }
-            last_indice = selected_element->col+1;
+            //imprimer le element non nul
             printf(SPACING, selected_element->val);
+            //avancer le derniere indice de 0s
+            last_indice = selected_element->col+1;
             selected_element = selected_element->suivant;
         }
+        //print les nuls qui continue jusqu'a la fin
         for(int j=last_indice; j<m.Ncolonnes; j++){
             printf(SPACING, 0);
         }
@@ -97,7 +96,6 @@ void afficherMatrice(matrice_creuse m){
 // 3.	Ecrire une fonction qui permet d’afficher toutes les listes chaînées
 void afficherMatriceListes(matrice_creuse m) {
     element* selected_element=NULL;
-    //printf("\nAffichange de matrice %p: ", m.tab_lignes);
     for(int i=0; i<m.Nlignes; i++){
         printf("\nligne %d -> ",i);
         selected_element = m.tab_lignes[i];
@@ -121,12 +119,14 @@ void afficherMatriceListes(matrice_creuse m) {
 
 //  4.	Ecrire une fonction qui renvoie la valeur de l'élément de la ligne i et la colonne j
 int rechercherValeur(matrice_creuse m, int i, int j) {
-    int result = 0;
+    int result = 0; //initialisation par defaut
     if(i<m.Nlignes && j<m.Ncolonnes){
         element * selected_element = m.tab_lignes[i];
+        //Passer les element de colone plus petit
         while(selected_element != NULL && selected_element->col < j){
             selected_element = selected_element->suivant;
         }
+        //Tester si on a arriver dans le derniere element
         if(selected_element != NULL && selected_element->col == j) result = selected_element->val;
     }else{
         printf("Fatal error max [%d][%d]", m.Nlignes, m.Ncolonnes);
@@ -140,66 +140,37 @@ int rechercherValeur(matrice_creuse m, int i, int j) {
 void affecterValeur(matrice_creuse m, int i, int j, int val) {
     element* selected_element=m.tab_lignes[i];
     element* old_element = NULL;
-    if(selected_element==NULL) {            //cas ligne est vide
-        m.tab_lignes[i] = (element *) malloc(sizeof(element));
-        selected_element = m.tab_lignes[i];
-        selected_element->suivant = NULL;
-        selected_element->col = j;
-        selected_element->val = val;
-    } else{                                 //cas ligne pas vide
-        while(selected_element != NULL && selected_element->col < j){
+    if(selected_element==NULL && val != 0) {  //CASE 1         //cas ligne est vide et on ajout element non nul
+        //metre a jour la tete
+        m.tab_lignes[i] = creerElement(j, val);
+
+    }else{                                 //cas ligne pas vide
+        while(selected_element != NULL && selected_element->col < j){ //Parcurire les elements avant notre colonne, stocker le plus proche en gauche dans old
             old_element = selected_element;
             selected_element=selected_element->suivant;
         }                                   // essayer à trouver cet element
-        if(selected_element != NULL && selected_element->col == j)      //colone est dans la list
-            selected_element->val=val;
-        else{
-            element  *temp=(element*)malloc(sizeof(element));
-            if(selected_element == NULL){
-                if(old_element == NULL)
-                    m.tab_lignes[i] = temp;
-                else{
-                    old_element->suivant = temp;
+        if(selected_element != NULL && selected_element->col == j){      //CASE 4 - colone est deja dans la list
+            if(val!=0) selected_element->val=val;   //affectuer une nouvelle valeur non nulle
+            else{ //supprimer cette element si la nouvelle valeur est nulle
+                if(old_element == NULL){ //si le premiere element de la ligneliste
+                    m.tab_lignes[i] = selected_element->suivant;
                 }
-                temp->suivant = NULL;
-            }else{
-                if(old_element == NULL)
-                    m.tab_lignes[i] = temp;
-                else
-                    old_element->suivant= temp;
-                temp->suivant = selected_element;
-            }
-            temp->val = val;
-            temp->col = j;
-        }/*
-
-            int first = 1;                                //colone n'exist pas
-            selected_element=m.tab_lignes[i];
-            while(selected_element->suivant!=NULL && ((selected_element->suivant)->col)<j){
-                selected_element=selected_element->suivant;
-                first = 0;
-            }
-            if(selected_element!=NULL){     //ce n'est pas la plus grand colone
-                element  *temp=(element*)malloc(sizeof(element));
-                if(first){
-                    temp->suivant=selected_element;
-                    m.tab_lignes[i] = temp;
-                 }else{
-                    temp->suivant=selected_element->suivant;
+                else{   //si pas la tete
+                    old_element->suivant = selected_element->suivant;
                 }
-                temp->col = j;
-                temp->val = val;
-            }else{                              // la plus grand element.
-                element  *temp=(element*)malloc(sizeof(element));
-                temp->suivant=NULL;
-                selected_element->suivant=temp;
-                //temp = m.tab_lignes[i - 1];
-                temp->col = j;
-                temp->val = val;
-
+                free(selected_element);
             }
-
-        }*/
+        }
+        else if(val != 0){//pas besoins d'entre si on a passe le cas de mise a jour.
+            element  *temp= creerElement(j, val);
+            if(old_element == NULL){//CASE 2 - Avant tous les elements
+                m.tab_lignes[i] = temp;
+            }
+            else{ //CASE 3 fin de la liste ou milieux
+                old_element->suivant = temp;
+            }
+            temp->suivant = selected_element;
+        }
     }
 }
 
@@ -215,7 +186,7 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
             element* ligne1 = (m1.tab_lignes)[i];
             element* ligne2 = (m2.tab_lignes)[i];
             element* old1 = ligne1;
-            if(ligne1 == NULL && ligne2==NULL) continue;
+            if(ligne1 == NULL && ligne2==NULL) continue;    //cas ligne nulle
             while( (ligne1 != NULL) && (ligne2 != NULL)){
                 if(ligne1->col == ligne2->col){
                     ligne1->val += ligne2->val;
@@ -226,8 +197,7 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
                     //colone de 2 viens avant colonne de 1
                     element* ajout_element = creerElement(ligne2->col, ligne2->val);
                     ajout_element->suivant = ligne1;
-                    if(old1 != ligne1){
-                        //if(old1 != (m1.tab_lignes)[i]){
+                    if(old1 != ligne1){//pas le premiere element en question
                         old1->suivant = ajout_element;
                     }else{
                         //le tout premiere element dois etre obtenu par ligne2
@@ -249,7 +219,7 @@ void additionerMatrices(matrice_creuse m1, matrice_creuse m2) {
                     old1 = ajout_element;
                     ligne2 = ligne2->suivant;
                 }
-                while(ligne2 != NULL){
+                while(ligne2 != NULL){//tous **le reste** de ligne 1 est vide
                     element * ajout_element = creerElement(ligne2->col, ligne2->val);
                     old1->suivant = ajout_element;
                     old1 = ajout_element;
@@ -325,7 +295,7 @@ void free_contenuMatrice(matrice_creuse m){
             }
             free(selected_element);
             old_selected_element->suivant = NULL;
-        }
+        }//le suivente est null mais on a pas libere notre element de tete
         free((m.tab_lignes)[i]);
     }
     free(m.tab_lignes);
